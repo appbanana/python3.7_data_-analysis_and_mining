@@ -12,7 +12,7 @@
     <session id="-2129377884">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
+          <entry key="project.closed" value="2" />
           <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.7" value="1" />
           <entry key="project.opened" value="2" />
@@ -34,52 +34,18 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="1482" />
+          <entry key="py" value="1495" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="1482" />
+          <entry key="Python" value="1495" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/chapter03/02-菜品盈利帕累托图.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="14" selection-start-line="9" selection-end-line="10" />
-              <folding>
-                <element signature="e#0#19#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/chapter03/03-餐饮销量数据相关性分析.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="443">
-              <caret line="34" column="65" selection-start-line="34" selection-start-column="65" selection-end-line="34" selection-end-column="65" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/chapter03/01-销售额箱型图检测异常数据.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-84">
-              <caret line="8" column="18" selection-start-line="8" selection-end-line="9" />
-              <folding>
-                <element signature="e#0#19#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -95,8 +61,9 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/chapter03/01-箱型图.py" />
-        <option value="$PROJECT_DIR$/chapter03/02-菜品盈利帕累托图.py" />
         <option value="$PROJECT_DIR$/chapter03/03-餐饮销量数据相关性分析.py" />
+        <option value="$PROJECT_DIR$/chapter03/01-销售额箱型图检测异常数据.py" />
+        <option value="$PROJECT_DIR$/chapter03/02-菜品盈利帕累托图.py" />
       </list>
     </option>
   </component>
@@ -107,7 +74,7 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="893" />
+    <option name="x" value="886" />
     <option name="y" value="299" />
     <option name="width" value="1674" />
     <option name="height" value="1000" />
@@ -126,17 +93,6 @@
             <path>
               <item name="python3.7_data_-analysis_and_mining" type="b2602c69:ProjectViewProjectNode" />
               <item name="python3.7_data_-analysis_and_mining" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="python3.7_data_-analysis_and_mining" type="b2602c69:ProjectViewProjectNode" />
-              <item name="python3.7_data_-analysis_and_mining" type="462c0819:PsiDirectoryNode" />
-              <item name="chapter03" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="python3.7_data_-analysis_and_mining" type="b2602c69:ProjectViewProjectNode" />
-              <item name="python3.7_data_-analysis_and_mining" type="462c0819:PsiDirectoryNode" />
-              <item name="chapter03" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="python3.7_data_-analysis_and_mining" type="b2602c69:ProjectViewProjectNode" />
@@ -191,9 +147,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="893" y="299" width="1674" height="1000" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25306374" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25306374" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -207,7 +162,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.32929516" />
+      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.32929516" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -257,18 +212,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/chapter03/01-销售额箱型图检测异常数据.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-84">
-          <caret line="8" column="18" selection-start-line="8" selection-end-line="9" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/chapter03/02-菜品盈利帕累托图.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="14" selection-start-line="9" selection-end-line="10" />
+        <state relative-caret-position="51">
+          <caret line="3" column="11" selection-start-line="3" selection-end-line="4" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
@@ -277,8 +222,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/chapter03/03-餐饮销量数据相关性分析.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="443">
-          <caret line="34" column="65" selection-start-line="34" selection-start-column="65" selection-end-line="34" selection-end-column="65" />
+        <state relative-caret-position="86">
+          <caret line="13" column="19" lean-forward="true" selection-start-line="13" selection-start-column="19" selection-end-line="13" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chapter03/02-菜品盈利帕累托图.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="21" selection-start-line="3" selection-start-column="21" selection-end-line="3" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
