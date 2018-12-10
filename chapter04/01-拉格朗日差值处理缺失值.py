@@ -1,6 +1,7 @@
 import pandas as pd
 from scipy import interpolate
 
+
 def ployinterp_column(s, n, k=5):
     """
     自定义插值函数
@@ -23,12 +24,12 @@ if __name__ == '__main__':
     # 将异常数据变为空值
     sale_data[u'销量'][(sale_data[u'销量'] < 400) | (sale_data[u'销量'] > 5000)] = None
     print(sale_data.head())
-    
+
     for i in sale_data.columns:
         for j in range(len(sale_data)):
             # pd.Index([5.2, 6.0, None]).isna() => array([False, False,  True], dtype=bool)
             # 找出空值的位置
-            if sale_data[i].isna()[j]:
+            if (sale_data[i].isna())[j]:
                 # 如果为空进项拉格朗日插值
                 sale_data[i][j] = ployinterp_column(sale_data[i], j)
 
