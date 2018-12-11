@@ -77,7 +77,7 @@ if __name__ == '__main__':
         temp_data = new_data[new_data[u'聚类类别'] == i]
         # 这要注意 这用的是data.columns  不是new_data.columns
         for j in range(len(data.columns)):
-            # 取出对应类别下 列的数据
+            # 取出对应类别下 列的数据 绘图 保存
             column_name = data.columns[j]
-            # pd_类别_列名 eg: pd_0_R
-            density_plot(temp_data[column_name]).savefig('{0}{1}{2}.png'.format('./temp/pd_', i, '_' + column_name))
+            # pd_类别_列名 eg: pd_0_R， pd_0_M
+            density_plot(temp_data[column_name]).savefig('{0}{1}{2}.png'.format('./img/pd_', i, '_' + column_name))
