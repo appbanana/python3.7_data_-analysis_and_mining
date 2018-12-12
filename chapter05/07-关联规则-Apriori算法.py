@@ -1,37 +1,62 @@
 import itertools
 import collections
 import pandas as pd
+
+
 # import numpy as np
+# from  .apriori import *
 
 
-# def find_frequent_itemsets(favorable_reviews_by_users, k_1_itemsets, min_support):
-#     counts = defaultdict(int)
-#     # 遍历所有用户和打过分的电影
-#     for user, reviews in favorable_reviews_by_users.items():
-#         for itemset in k_1_itemsets:
-#             # 如果一个集合的子集不是频繁项集 那么这个子集的超集一定不是频繁项集
-#             if itemset.issubset(reviews):
-#                 # 用户打过分 但没有出现在itemset子集中 然后在itemset和剩下的元素进行组合
-#                 for other_review_moive in (reviews - itemset):
-#                     current_superset = itemset | frozenset((other_review_moive,))
-#                     counts[current_superset] += 1
-#     return dict([(itemset, frequent) for itemset, frequent in counts.items() if frequent >= min_support])
-
-
-def find_max_frequent_set(input_data, input_set, k_1_itemsets, support):
-
-    for cur_set in input_set:
-        for item in k_1_itemsets:
-            temp_set = cur_set | item
-
-            print(cur_set, item)
-
-
-    # print(data_sum['a'])
-    #
-    # print(input_data.shape)
-    # print(set(input_data))
-    return 0
+def find_rule(input_data, mini_support, mini_confidence, ms='---'):
+    # data_sum 总共有10位客人点的菜单，统计各个菜被点的次数
+    data_sum = input_data.sum()
+    # print(data_sum)
+    # a    7.0
+    # c    7.0
+    # e    3.0
+    # b    8.0
+    # d    2.0
+    
+    # 总共10个菜单  input_data.shape = (10, 5)
+    total_num = input_data.shape[0]
+    # data_sum 计算每个菜的被点的概率
+    data_sum = data_sum / total_num
+    # print(data_sum)
+    # a    0.7
+    # c    0.7
+    # e    0.3
+    # b    0.8
+    # d    0.2
+    
+    # 获取满足最小支持度的单个项集 此时data_sum为L1
+    data_sum = data_sum[data_sum >= min_support]
+    # # 获取餐馆所有的菜名 L1 eg：总共5个菜 {'c', 'b', 'a', 'e', 'd'}
+    single_item_set = set(data_sum.index)
+    # print(itertools.combinations(single_item_set, 2))
+    for i in range(2, len(data_sum.index)):
+        temp_set = itertools.combinations(single_item_set, i)
+        temp_data = input_data
+        for item_i in temp_set:
+            # print(item_i) => 所有的两位组合 三位组合 四位组合 5位组合
+            for item_j in item_i:
+                print(input_data[])
+        
+        
+    # for (x, y) in itertools.combinations(single_item_set, 2):
+    #     print(single_item_set - set(x, y))
+    # item_set_list = [single_item_set]
+    # current_set = single_item_set
+    # # for i in range(len(data_sum.index)):
+    # for item_x in current_set:
+    #     for item_y in single_item_set:
+    #     # temp_set = set(item)
+    #         print(set(item_x) | set(item_y))
+            
+        
+    # for i in single_item_set:
+    #     print(single_item_set - i)
+        # itertools.combinations(single_item_set - i)
+    # print(single_item_set)
 
 
 if __name__ == '__main__':
@@ -68,42 +93,5 @@ if __name__ == '__main__':
     min_support = 0.2
     # 最小置信度
     min_confidence = 0.5
-
-    # data_sum 总共有10位客人点的菜单，统计各个菜被点的次数
-    # a    7.0
-    # c    7.0
-    # e    3.0
-    # b    8.0
-    # d    2.0
-    data_sum = data.sum()
-    # 总共10个菜单  input_data.shape = (10, 5)
-    total_num = data.shape[0]
-    # data_sum 计算每个菜的被点的概率
-    # a    0.7
-    # c    0.7
-    # e    0.3
-    # b    0.8
-    # d    0.2
-    data_sum = data / total_num
-
-    # 获取满足最小支持度的单个项集 此时data_sum为L1
-    data_sum = data_sum[data >= min_support]
-    # 获取餐馆所有的菜名 eg：总共5个菜 {'c', 'b', 'a', 'e', 'd'}
-    single_item_set = set(data_sum)
-    current_frequent_set = [single_item_set]
-    print(dict(data_sum))
-
-    # frequent_itemsets = {}
-    # frequent_itemsets[1] = dict(data_sum[data >= min_support])
-    #
-    # current_frequent_set[1] = find_max_frequent_set(data, current_frequent_set, single_item_set, min_support)
-
-    # 寻找最大频繁项集 连接步 剪纸步
-    # for i in range(2, len(data.columns)):
-    #     if len(current_frequent_set) == 0:
-    #         break
-    #     else:
-    #         current_frequent_set = find_max_frequent_set(current_frequent_set, single_item_set, min_support)
-
-        # result = get_rule(data, min_support, min_confidence)
-    # print(result)
+    
+    find_rule(data, min_support, min_confidence)
