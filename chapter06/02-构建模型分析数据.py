@@ -1,35 +1,62 @@
 import pandas as pd
+from matplotlib import pyplot as plt
 from keras import models
 from keras.layers import core
+from sklearn import metrics
+from random import shuffle
+import numpy as np
 
-# 注意 tensorflow在python-3.7.0虚拟的环境下没有找到对应的版本 我在这个文件切换到我的虚拟3.6.1环境
+
+# from random import shuffle
+#
+# import matplotlib.pyplot as plt
+# import pandas as pd
+# from keras.layers.core import Activation, Dense
+# from keras.models import Sequential
+# from scipy.interpolate import lagrange
+# from sklearn.externals import joblib
+# from sklearn.metrics import confusion_matrix, roc_curve
+# from sklearn.tree import DecisionTreeClassifier
+
+# 注意 tensorflow在python-3.7.0虚拟的环境下没有找到对应的版本(2018.12.10) 我在这个文件切换到我的虚拟3.6.1环境
+
+def cm_plot(y, yp):
+    print(y)
+    print('***' * 10)
+    print(yp)
+    cm = metrics.confusion_matrix(y, yp)
+    plt.matshow(cm, cmap=plt.cm.Greens)
+    plt.colorbar()
+    for x in range(len(cm)):
+        for y in range(len(cm)):
+            plt.annotate(cm[x, y], xy=(x, y), horizontalalignment='center', verticalalignment='center')
+    
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+    return plt
+
 
 if __name__ == '__main__':
     file_name = './data/model.xls'
     # 读取数据
     data = pd.read_excel(file_name)
-    # print(data)
-    # 随机取其中的80%的数据作为训练数据 剩下的作为测试数据
-    train_data = data.sample(frac=0.8)
-    # 取出剩下的数据作为 测试数据
-    """
-    a = pd.Series(np.arange(10))
-    b = a - a.sample(frac=0.3)
-    c = a[b.isna()]
-    以下是b的数据 Nan的为随机没有取到的数据 0为随机取到是数据
-    0    NaN
-    1    NaN
-    2    NaN
-    3    0.0
-    4    NaN
-    5    0.0
-    6    NaN
-    7    NaN
-    8    NaN
-    9    0.0
-    """
-    test_data = data[(data - train_data).isna()]
-
+    # 随机打乱数据
+    shuffle(data.values)
+    # np.random.shuffle(data.values)
+    
+    # p 为获取训练数据的比例
+    p = 0.8
+    # 去前 80% 的数据为训练数据
+    train_num = int(len(data) * p)
+    train_data = data.iloc[: train_num, :]
+    test_data = data.iloc[: (len(data) - train_num), :]
+    #
+    X_train = train_data.iloc[:, :-1]
+    y_train = train_data.iloc[:, -1]
+    X_test = test_data.iloc[:, :-1]
+    y_test = test_data.iloc[:, -1]
+    # print(test_data)
+    
     # 建立模型
     model = models.Sequential()
     # 添加输入层（3个点）到 隐藏层（10个点）的连接
@@ -40,7 +67,23 @@ if __name__ == '__main__':
     model.add(core.Dense(input_dim=10, units=1))
     # 输出层使用sigmoid激活函数
     model.add(core.Activation('sigmoid'))
-    model.compile(loss='binary_crossentropy', optimizer='adam', class_mode='binary')
+    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
     # 训练模型
-    # model.fit(train_data.iloc[:, :-1], train_data.iloc[:, -1], nb_epoch=1000, batch_size=1)
-    # model.save_weights('./net.model')
+    model.fit(X_train, y_train, epochs=20, batch_size=1)
+    model.save_weights('./net.model')
+    
+    predict_result = model.predict_classes(X_train).reshape(len(X_train))
+    
+    plt = cm_plot(y_train, predict_result)
+    # plt.show()
+    
+    predict_result = model.predict(X_test).reshape(len(X_test))
+    fpr, tpr, thresholds = metrics.roc_curve(y_test, predict_result, pos_label=1)
+    plt.plot(fpr, tpr, linewidth=2, label='ROC of LM')
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.ylim(0, 1.05)
+    plt.xlim(0, 1.05)
+    plt.legend(loc=4)
+    plt.show()
+    print(thresholds)
