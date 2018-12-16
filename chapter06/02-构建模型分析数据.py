@@ -1,24 +1,14 @@
 import pandas as pd
+import matplotlib
+matplotlib.use('TkAgg')
 from matplotlib import pyplot as plt
 from keras import models
 from keras.layers import core
 from sklearn import metrics
 from random import shuffle
-import numpy as np
 
-
-# from random import shuffle
-#
-# import matplotlib.pyplot as plt
-# import pandas as pd
-# from keras.layers.core import Activation, Dense
-# from keras.models import Sequential
-# from scipy.interpolate import lagrange
-# from sklearn.externals import joblib
-# from sklearn.metrics import confusion_matrix, roc_curve
-# from sklearn.tree import DecisionTreeClassifier
-
-# 注意 tensorflow在python-3.7.0虚拟的环境下没有找到对应的版本(2018.12.10) 我在这个文件切换到我的虚拟3.6.1环境
+# python-3.7.0环境下安装tensorflow
+#  pip install https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-1.12.0-py3-none-any.whl
 
 def cm_plot(y, yp):
     print(y)
@@ -75,15 +65,15 @@ if __name__ == '__main__':
     predict_result = model.predict_classes(X_train).reshape(len(X_train))
     
     plt = cm_plot(y_train, predict_result)
-    # plt.show()
-    
-    predict_result = model.predict(X_test).reshape(len(X_test))
-    fpr, tpr, thresholds = metrics.roc_curve(y_test, predict_result, pos_label=1)
-    plt.plot(fpr, tpr, linewidth=2, label='ROC of LM')
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.ylim(0, 1.05)
-    plt.xlim(0, 1.05)
-    plt.legend(loc=4)
     plt.show()
-    print(thresholds)
+    
+    # predict_result = model.predict(X_test).reshape(len(X_test))
+    # fpr, tpr, thresholds = metrics.roc_curve(y_test, predict_result, pos_label=1)
+    # plt.plot(fpr, tpr, linewidth=2, label='ROC of LM')
+    # plt.xlabel('False Positive Rate')
+    # plt.ylabel('True Positive Rate')
+    # plt.ylim(0, 1.05)
+    # plt.xlim(0, 1.05)
+    # plt.legend(loc=4)
+    # plt.show()
+    # print(thresholds)
