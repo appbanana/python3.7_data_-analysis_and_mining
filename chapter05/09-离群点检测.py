@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 from sklearn import cluster
+import matplotlib
+matplotlib.use('TkAgg')
 from matplotlib import pyplot as plt
 
 # # 指定默认字体 用来正常显示中文标签
@@ -39,11 +41,12 @@ if __name__ == '__main__':
 
     discrete_points = norm[norm > threshold]
     discrete_points.plot(style='bo')
+    plt.figure()
     for i in range(len(discrete_points)):
         id = discrete_points.index[i]
         point = discrete_points.iloc[i]
         plt.annotate('(%s, %.2f)' % (id, point), xy=(id, point), xytext=(id + 10, point - 0.1))
-    plt.savefig('{0}.png'.format('./img/Figure_9'))
+    # plt.savefig('{0}.png'.format('./img/Figure_9'))
     plt.xlabel(u'编号')
     plt.ylabel(u'相对距离')
     plt.show()
