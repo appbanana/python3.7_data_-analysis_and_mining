@@ -1,10 +1,9 @@
 from random import shuffle
-import itertools
 import matplotlib
+
 matplotlib.use('TkAgg')
 import pandas as pd
 from sklearn import metrics, tree
-from sklearn.externals import joblib
 from matplotlib import pyplot as plt
 
 # # 指定默认字体 用来正常显示中文标签
@@ -23,15 +22,14 @@ def cm_plot(y_true, y_predict):
     for x in range(len(cm)):
         for y in range(len(cm)):
             plt.annotate(cm[x, y], xy=(x, y), horizontalalignment='center', verticalalignment='center')
-    
-    
+
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
     plt.tight_layout()
     # plt.show()
     # plt.tight_layout()
     return plt
-    
+
     # return plt
 
 
@@ -42,7 +40,7 @@ if __name__ == '__main__':
     # 随机打乱数据
     shuffle(data.values)
     # np.random.shuffle(data.values)
-    
+
     # p 为获取训练数据的比例
     p = 0.8
     # 去前 80% 的数据为训练数据
@@ -54,17 +52,25 @@ if __name__ == '__main__':
     y_train = train_data.iloc[:, -1]
     X_test = test_data.iloc[:, :-1]
     y_test = test_data.iloc[:, -1]
-    
+
     # 建立决策树模型
-    treefile = './tree.pkl'
-    
+    # treefile = './tree.pkl'
     model = tree.DecisionTreeClassifier()
     # 训练模型
     model.fit(X_train, y_train)
     # joblib.dump(model, treefile)
     plt = cm_plot(y_train, model.predict(X_train))
-    plt.savefig('{0}.png'.format('./img/Figure_03'))
-    print(matplotlib.matplotlib_fname())
-    
+    # plt.savefig('{0}.png'.format('./img/Figure_03_1'))
+    plt.show()
 
+    # 绘制决策树的ROC曲线
+    print(model.predict_proba(X_test))
+    fpr, tpr, thresholds = metrics.roc_curve(y_test, model.predict_proba(X_test)[:, 1], pos_label=1)
+    plt.plot(fpr, tpr, linewidth=2, label='ROC of CART')
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.xlim(0, 1.05)
+    plt.ylim(0, 1.05)
+    plt.legend(loc=4)
+    plt.savefig('{0}.png'.format('./img/Figure_03_2'))
     plt.show()
