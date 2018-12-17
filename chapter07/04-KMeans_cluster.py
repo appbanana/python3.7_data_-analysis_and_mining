@@ -59,7 +59,6 @@ def plot_cluster(data, kmodel):
 
 if __name__ == '__main__':
     file_name = './temp/core_data.xls'
-    # file_name = './data/zscoreddata.xls'
     core_data = pd.read_excel(file_name)
 
     # 建立模型
