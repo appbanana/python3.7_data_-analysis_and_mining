@@ -52,7 +52,7 @@ def plot_cluster(data, kmodel):
         ax.plot(angles, plot_data[i], 'o-', color=colors[i], linewidth=2, label=u'客户群' + str(i+1), )
     ax.set_rgrids(np.arange(0.01, 3.5, 0.5), np.arange(-1, 2.5, 0.5), fontproperties="SimHei")
     ax.set_thetagrids(angles * 180 / np.pi, labels, fontproperties="SimHei")
-    plt.savefig('{0}.png'.format('./img/Figure_04'))
+    # plt.savefig('{0}.png'.format('./img/Figure_04'))
     plt.legend(loc=0)
     plt.show()
 

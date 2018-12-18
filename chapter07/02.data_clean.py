@@ -13,7 +13,7 @@ if __name__ == '__main__':
     # 丢弃票价为0的数据
     index1 = air_data['SUM_YR_1'] > 0
     index2 = air_data['SUM_YR_2'] > 0
+    # 保留折扣为0但总飞行公里数同时为0的数据
     index3 = air_data['avg_discount'] == 0 & air_data['SEG_KM_SUM']
-    # 丢弃折扣为0 但总飞行公里数同时为0的数据
     air_data = air_data[index1 | index2 | index3]
     air_data.to_excel('./temp/clean.xls')
