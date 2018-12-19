@@ -48,6 +48,7 @@ if __name__ == '__main__':
         """
         r.index = [1, 2, 3, 4]
         r[value] = r[value].rolling(2).mean()
+        print(r)
         """
         1       NaN  240
         2  0.178698  356

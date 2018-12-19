@@ -1,6 +1,5 @@
 from random import shuffle
 import matplotlib
-
 matplotlib.use('TkAgg')
 import pandas as pd
 from sklearn import metrics, tree
