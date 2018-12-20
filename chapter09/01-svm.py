@@ -1,7 +1,7 @@
 # from random import shuffle
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
+from sklearn import model_selection
 from sklearn import svm, metrics
 from matplotlib import pyplot as plt
 
@@ -33,7 +33,7 @@ if __name__ == '__main__':
     X = data.iloc[:, 2:] * 30
     y = data[u'类别'].astype(int)
     # 去其中20%当做测试数据 80%当做训练数据
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, shuffle=True)
+    X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y, test_size=0.20, shuffle=True)
 
     # 构建模型 训练模型
     model = svm.SVC(gamma='scale')
