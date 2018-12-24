@@ -20,5 +20,9 @@ if __name__ == '__main__':
         diff = diff + 1
         ([lb], [p]) = diagnostic.acorr_ljungbox(train_data['CWXT_DB:184:D:\\'].diff(diff).dropna(), lags=1)
 
-    # print(result)
-    print(u'原始序列经过%s阶差分后归于平稳，p值为%s' % (diff, p))
+    print(u'原始序列经过%s阶差分后为非白噪声序列，p值为%s' % (diff, p))
+
+    # if p < 0.05:
+    #     print(u'原始序列经过%s阶差分后为非白噪声序列，p值为%s' % (diff, p))
+    # else:
+    #     print(u'原始序列经过%s阶差分后为白噪声序列，p值为%s' % (diff, p))

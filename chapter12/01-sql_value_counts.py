@@ -57,7 +57,7 @@ if __name__ == '__main__':
     counts_['percent'] = (counts_['num'] / counts_['num'].sum()) * 100
 
     # print('****' * 10)
-    # print(counts_)
+    print(counts_)
     """
       type     num    percent
     0  101  411665  49.156965

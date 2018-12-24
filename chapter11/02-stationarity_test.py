@@ -15,9 +15,11 @@ if __name__ == '__main__':
     diff = 0
     adf = stattools.adfuller(train_data['CWXT_DB:184:D:\\'])
     print(adf)
+    # (-2.6460462274942986, 0.08384889634121945, 0, 41, {'1%': -3.60098336718852, '5%': -2.9351348158036012, '10%': -2.6059629803688282}, 958.701132117506)
     # adf[1]为pvalue的值
     while adf[1] >= 0.05:
         diff += 1
         adf = stattools.adfuller(train_data['CWXT_DB:184:D:\\'].diff(diff).dropna())
 
     print(u'原始序列经过%s阶差分后归于平稳，p值为%s' % (diff, adf[1]))
+    # 原始序列经过1阶差分后归于平稳，p值为4.792591263393756e-07
