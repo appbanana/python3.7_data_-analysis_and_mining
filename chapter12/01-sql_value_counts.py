@@ -1,6 +1,10 @@
 import pandas as pd
 from sqlalchemy import create_engine
 
+# mac上启动mariaDB mysql.server start
+# mac上关闭mariaDB mysql.server stop
+# 连接数据库 mysql -u root
+
 if __name__ == '__main__':
     # 初始化数据库连接:
     engine = create_engine('mysql+pymysql://root:123456@localhost:3306/test')
