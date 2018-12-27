@@ -2,6 +2,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 
+# 参考网站 https://www.cnblogs.com/amoor/p/9724429.html
 def count107(j):
     # http://www.lawtime.cn/info/jiaotong  知识首页
     # http://www.lawtime.cn/info/jiaotong/jtlawdljtaqf/ 知识列表
@@ -52,25 +53,12 @@ def count_199(p):
 
     return p['type'].value_counts()
 
-def count_199(p):
-    p = p[['fullURLId', 'pageTitle']][p['fullURL'].str.contains('?', regex=False)].copy()
-    p = p[['pageTitle']][p['fullURLId'].str.contains('1999001')].copy()
 
-    # p['type'] = None  # 添加空列
-    # p['type'][p['pageTitle'].str.contains('法律快车-律师助手', na=False, regex=True)] = u'快车-法律助手'
-    # p['type'][p['pageTitle'].str.contains('免费发布法律咨询', na=False, regex=True)] = u'免费发布法律咨询'
-    # p['type'][p['pageTitle'].str.contains('咨询发布成功', na=False, regex=True)] = u'咨询发布成功'
-    # p['type'][p['pageTitle'].str.contains('法律快搜', na=False, regex=True)] = u'法律快搜'
-    # p['type'][~p['pageTitle'].str.contains('(法律快车-律师助手|免费发布法律咨询|咨询发布成功|法律快搜)', na=False, regex=True)] = u'其他类型'
+def wandering(p):
+    # p = p[['fullURLId']][~p['fullURL'].str.contains('\.html$')].copy()
+    p = p[['fullURLId']][~p['fullURL'].str.endswith('.html')].copy()
 
-    p['type'] = 1  # 添加空列
-    p.loc[p['pageTitle'].str.contains('法律快车-律师助手', na=False, regex=True), 'type'] = u'快车-法律助手'
-    p.loc[p['pageTitle'].str.contains('免费发布法律咨询', na=False, regex=True), 'type'] = u'免费发布法律咨询'
-    p.loc[p['pageTitle'].str.contains('咨询发布成功', na=False, regex=True), 'type'] = u'咨询发布成功'
-    p.loc[p['pageTitle'].str.contains('法律快搜', na=False, regex=True), 'type'] = u'法律快搜'
-    p.loc[p['type'] == 1, 'type'] = u'其他类型'
-
-    return p['type'].value_counts()
+    return p['fullURLId'].value_counts()
 
 
 if __name__ == '__main__':
@@ -134,13 +122,13 @@ if __name__ == '__main__':
     """
 
     # 统计带有问号的网址中，其他(1999001)类型统计
-    count_199 = [count_199(m) for m in sql]
-    count_199 = pd.concat(count_199).groupby(level=0).sum()
-    count_199 = count_199.reset_index()
-    count_199.columns = ['type', 'num']
-    count_199 = count_199.sort_values(by='num', ascending=False)
-    count_199['percent'] = count_199['num'] / count_199['num'].sum() * 100
-    print(count_199)
+    # count_199 = [count_199(m) for m in sql]
+    # count_199 = pd.concat(count_199).groupby(level=0).sum()
+    # count_199 = count_199.reset_index()
+    # count_199.columns = ['type', 'num']
+    # count_199 = count_199.sort_values(by='num', ascending=False)
+    # count_199['percent'] = count_199['num'] / count_199['num'].sum() * 100
+    # print(count_199)
     """
            type    num    percent
     3   快车-法律助手  49894  77.094471
@@ -151,3 +139,39 @@ if __name__ == '__main__':
 
 
     """
+
+    # 闲逛用户统计
+    count_wandering = [wandering(m) for m in sql]
+    count_wandering = pd.concat(count_wandering).groupby(level=0).sum()
+    # print(count_wandering)
+    """
+    101001       5603
+    101004        125
+    101005         63
+    101006        107
+    101008        378
+    101009        854
+    102001       2129
+    102002      12021
+    102003       1235
+
+    """
+    count_wandering = count_wandering.reset_index()
+    count_wandering['index'] = count_wandering['index'].str.extract('(\d{3})')
+    count_wandering = count_wandering.groupby(by=['index']).sum()
+    count_wandering = pd.DataFrame(count_wandering)
+    count_wandering = count_wandering.reset_index()
+    count_wandering.columns = ['fullURLId', 'num']
+    count_wandering = count_wandering.sort_values(by='fullURLId', ascending=False)
+    print(count_wandering)
+    """
+      fullURLId     num
+    5       301    1024
+    4       199  118034
+    3       107   18175
+    2       106    3957
+    1       102   17357
+    0       101    7130
+
+    """
+
