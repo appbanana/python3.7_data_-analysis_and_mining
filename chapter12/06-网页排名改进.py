@@ -98,7 +98,7 @@ if __name__ == '__main__':
     # 计算各个fullURLId下总的点击数
     type_count_result = type_count_result.groupby(by=['fullURLId']).sum()
     type_count_result = type_count_result.reset_index()
-    print(type_count_result)
+    # print(type_count_result)
     """
       fullURLId  click_times
     0       101       404535
@@ -120,7 +120,7 @@ if __name__ == '__main__':
     temp_type_count = temp_type_count.groupby(by='fullURLId').sum()
     # print('********' * 10)
     temp_type_count = temp_type_count.reset_index()
-    print(temp_type_count)
+    # print(temp_type_count)
     """
       fullURLId  realIP
     0       101  176163
@@ -148,30 +148,136 @@ if __name__ == '__main__':
     """
 
     # 翻页网页统计
-    # web_page_count = pd.DataFrame()
-    # web_count['tempURL'] = web_count['fullURL'].str.extract(r'(.+)\.html', expand=False)
-    # print(web_count)
-    """
-                                                      fullURL  click_times                                        tempfullURL
-    0                   http://www.lawtime.cn/faguizt/23.html         6503                   http://www.lawtime.cn/faguizt/23
-    1       http://www.lawtime.cn/info/hunyin/lhlawlhxy/20...         4938  http://www.lawtime.cn/info/hunyin/lhlawlhxy/20...
-    2                    http://www.lawtime.cn/faguizt/9.html         4562                    http://www.lawtime.cn/faguizt/9
-    3       http://www.lawtime.cn/info/shuifa/slb/20121119...         4495  http://www.lawtime.cn/info/shuifa/slb/20121119...
-
-    """
     # _数字 后面代表页码，我是简单匹配1到100页的数据
-    web_page_count = web_count[web_count['fullURL'].str.contains('(.*)_[1-100]\.html')]
-    print(web_page_count)
-
-    # web_count['tempURL'] = web_count['fullURL'].str.extract(r'(.+)\.html', expand=False)
-
+    web_page_count = web_count[web_count['fullURL'].str.contains('_\d{1,2}\.html')]
+    # 把'_数字.html'替换成'.html'
+    web_page_count['tempURL'] = web_page_count['fullURL'].str.replace('_\d{0,2}\.html', '.html')
     # print(web_page_count)
-    # for url in web_count['tempURL']:
-    #     temp = web_count[web_count['fullURL'].str.startswith(url)]
-    #     if not temp.empty:
-    #         web_page_count.append(temp)
-    # # [web_page_count.append(web_count[]) for url in web_count['tempURL']]
-    # print(web_page_count)
+    """
+                                                      fullURL  click_times                                            tempURL
+    5       http://www.lawtime.cn/info/hunyin/lhlawlhxy/20...         3305  http://www.lawtime.cn/info/hunyin/lhlawlhxy/20...
+    10      http://www.lawtime.cn/info/shuifa/slb/20121119...         2161  http://www.lawtime.cn/info/shuifa/slb/20121119...
+    24      http://www.lawtime.cn/info/minshi/fagui/201305...          653  http://www.lawtime.cn/info/minshi/fagui/201305...
+    35      http://www.lawtime.cn/info/hunyin/hunyinfagui/...          440  http://www.lawtime.cn/info/hunyin/hunyinfagui/...
+    40      http://www.lawtime.cn/info/jiaotong/jtlawjtxgf...          377  http://www.lawtime.cn/info/jiaotong/jtlawjtxgf...
+
+
+    """
+    # 这样做的目的为了一会过滤出个数大于1的网址 个数大于1才有翻页的可能
+    temp_web_page_count = web_page_count['tempURL'].value_counts()
+    temp_web_page_count = temp_web_page_count.reset_index()
+    temp_web_page_count.columns = ['tempURL', u'出现次数']
+    temp_web_page_count = temp_web_page_count[temp_web_page_count[u'出现次数'] > 1]
+    temp_web_page_count = temp_web_page_count.sort_values(by=u'出现次数', ascending=False)
+    # print(temp_web_page_count)
+    """
+                                                    tempURL  出现次数
+    0     http://www.lawtime.cn/info/hetong/htfalv/20131...    31
+    1     http://www.lawtime.cn/info/xingshisusongfa/fal...    29
+    2     http://www.lawtime.cn/info/hehuo/falvguiding/2...    25
+    4     http://www.lawtime.cn/info/jiaotong/shpcbaoxia...    24
+    3     http://www.lawtime.cn/info/xingfa/xingfaquanwe...    24
+    5     http://www.lawtime.cn/info/minshi/fagui/201401...    22
+    6     http://www.lawtime.cn/info/hetong/zlht/2011030...    22
+    7     http://www.lawtime.cn/info/gongsi/gszc/2011052...    20
+    8                     http://law.lawtime.cn/p1area.html    20
+
+    """
+    # 合并数据 以temp_web_page_count为基准
+    temp_web_page_count = pd.merge(temp_web_page_count, web_page_count, on='tempURL', how='left')
+    # 以'http://***/'替换'http://www.域名.cn/info' 方便数据查看 我的正则比较简单粗暴
+    temp_web_page_count['tempURL'] = temp_web_page_count['tempURL'].str.replace('(.*)/info', 'http://***/',
+                                                                                regex=True)
+    temp_web_page_count['fullURL'] = temp_web_page_count['fullURL'].str.replace('(.*)/info', 'http://***/',
+                                                                                regex=True)
+    # 过滤掉tempURL出现一次的数据  因为翻页的话tempURL出现的次数要大于1次
+    temp_web_page_count = temp_web_page_count[temp_web_page_count[u'出现次数'] > 1]
+    # 删除这一列 因为它的使命已经完成
+    del temp_web_page_count['出现次数']
+    # 打印出来数据较多 因此在过滤到点击次数大于100的数据
+    temp_web_page_count = temp_web_page_count[temp_web_page_count[u'click_times'] > 100]
+    temp_web_page_count = temp_web_page_count.sort_values(by=['fullURL'], ascending=True)
+    # temp_web_page_count = temp_web_page_count.groupby()
+
+    # print(temp_web_page_count)
+    """
+                                                    tempURL                                            fullURL  click_times
+    1519        http://***//minshi/fagui/2013051382463.html      http://***//minshi/fagui/2013051382463_4.html          653
+    1520        http://***//minshi/fagui/2013051382463.html      http://***//minshi/fagui/2013051382463_5.html          177
+    1521        http://***//minshi/fagui/2013051382463.html      http://***//minshi/fagui/2013051382463_6.html          138
+    1522        http://***//minshi/fagui/2013051382463.html      http://***//minshi/fagui/2013051382463_2.html          129
+    1523        http://***//minshi/fagui/2013051382463.html      http://***//minshi/fagui/2013051382463_7.html          126
+    1524        http://***//minshi/fagui/2013051382463.html      http://***//minshi/fagui/2013051382463_3.html          111
+    4276   http://***//laodong/ldzyjygl/20140312142061.html  http://***//laodong/ldzyjygl/20140312142061_2....          173
+    4277   http://***//laodong/ldzyjygl/20140312142061.html  http://***//laodong/ldzyjygl/20140312142061_3....          112
+    6649  http://***//laodong/ldzyjqdy/201411043308948.html  http://***//laodong/ldzyjqdy/201411043308948_2...          186
+    4708  http://***//laodong/gsbxtiaoli/201408193306484...  http://***//laodong/gsbxtiaoli/201408193306484...          106
+    ...
+    ...
+    """
+    del temp_web_page_count['tempURL']
+    """
+                                                    fullURL  click_times
+    2297     http://***//hetong/ldht/201311152872128_2.html          377
+    2298     http://***//hetong/ldht/201311152872128_3.html          218
+    2299     http://***//hetong/ldht/201311152872128_4.html          146
+    2300     http://***//hetong/ldht/201311152872128_5.html          122
+    7433  http://***//hunyin/hunyinfagui/20110813143541_...          172
+    7434  http://***//hunyin/hunyinfagui/20110813143541_...          121
+    2816  http://***//hunyin/hunyinfagui/201411053308986...          440
+    2817  http://***//hunyin/hunyinfagui/201411053308986...          373
+    2818  http://***//hunyin/hunyinfagui/201411053308986...          340
+    2819  http://***//hunyin/hunyinfagui/201411053308986...          328
+    6133  http://***//hunyin/jihuashengyu/20120215163891...          267
+    6134  http://***//hunyin/jihuashengyu/20120215163891...          133
+
+    """
+    # 因为打印显示不完全再次替换
+    temp_web_page_count['fullURL'] = temp_web_page_count['fullURL'].str.replace('hunyinfagui/', 'hyfg/',
+                                                                                regex=True)
+    temp_web_page_count['fullURL'] = temp_web_page_count['fullURL'].str.replace('jihuashengyu/', 'jhsy/',
+                                                                                regex=True)
+
+    temp_web_page_count['fullURL'] = temp_web_page_count['fullURL'].str.replace('jiaotong/', 'jt/',
+                                                                                regex=True)
+    temp_web_page_count['fullURL'] = temp_web_page_count['fullURL'].str.replace('laodong/', 'ld/',
+                                                                                regex=True)
+    print(temp_web_page_count)
+    """
+                                                    fullURL  click_times
+    2732     http://***//hetong/ldht/201311152872128_2.html          377
+    2733     http://***//hetong/ldht/201311152872128_3.html          218
+    2734     http://***//hetong/ldht/201311152872128_4.html          146
+    2735     http://***//hetong/ldht/201311152872128_5.html          122
+    5917      http://***//hunyin/hyfg/20110813143541_2.html          172
+    5918      http://***//hunyin/hyfg/20110813143541_3.html          121
+    2984     http://***//hunyin/hyfg/201411053308986_2.html          440
+    2985     http://***//hunyin/hyfg/201411053308986_3.html          373
+    2986     http://***//hunyin/hyfg/201411053308986_4.html          340
+    2987     http://***//hunyin/hyfg/201411053308986_5.html          328
+    5965      http://***//hunyin/jhsy/20120215163891_2.html          267
+    5966      http://***//hunyin/jhsy/20120215163891_3.html          133
+    6321     http://***//hunyin/jhsy/201411053308990_2.html          143
+    6757   http://***//jt/jtlawjtxgfg/20121011120700_2.html          103
+    6926  http://***//jt/jtlawjtxgfg/201411273309942_2.html          158
+    6925  http://***//jt/jtlawjtxgfg/201411273309942_3.html          377
+    6185       http://***//jt/jtpcbz/201406193018102_2.html          110
+    4621   http://***//ld/gsbxtiaoli/201408193306484_3.html          106
+    7501     http://***//ld/ldzyjqdy/201411043308948_2.html          186
+    4726      http://***//ld/ldzyjygl/20140312142061_2.html          173
+    4727      http://***//ld/ldzyjygl/20140312142061_3.html          112
+    1746      http://***//minshi/fagui/2013051382463_2.html          129
+    1748      http://***//minshi/fagui/2013051382463_3.html          111
+    1743      http://***//minshi/fagui/2013051382463_4.html          653
+    1744      http://***//minshi/fagui/2013051382463_5.html          177
+    1745      http://***//minshi/fagui/2013051382463_6.html          138
+    1747      http://***//minshi/fagui/2013051382463_7.html          126
+
+    """
+
+
+
+
 
 
 
