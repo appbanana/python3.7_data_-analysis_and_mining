@@ -25,7 +25,6 @@ def handle_full_url(p):
     return p
 
 
-# 使用sql查询与书中数据有出入 思路可以参考
 if __name__ == '__main__':
     # 初始化数据库连接:
     engine = create_engine('mysql+pymysql://root:123456@localhost:3306/test?charset=utf8mb4')
@@ -34,6 +33,8 @@ if __name__ == '__main__':
     df_result = pd.concat(result)
     # 去除重复的数据
     df_result = df_result.drop_duplicates()
+    # 写入的时候可能会遇到 ALTER TABLE cleaned_gzdata_one CONVERT TO CHARACTER SET utf8mb4; 问题 需要用下面的语句把表的格式改一下
+    # ALTER TABLE cleaned_gzdata_one CONVERT TO CHARACTER SET utf8mb4;
     df_result.to_sql('cleaned_gzdata', engine, index=False, if_exists='append')
 
     print(df_result.head())
