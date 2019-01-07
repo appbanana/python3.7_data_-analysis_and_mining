@@ -16,6 +16,9 @@ if __name__ == '__main__':
     result = [handle_data(i) for i in sql]
     # df_result.shape (16606, 5)
     df_result = pd.concat(result)
+    # 写入婚姻数据 以方便使用
+    df_result.to_sql('hunyin_data', engine, index=False, if_exists='append')
+
     # print(df_result)
 
     # 统计网址被点击从次数
