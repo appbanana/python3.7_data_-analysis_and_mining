@@ -1,34 +1,33 @@
 import pandas as pd
-from sqlalchemy import create_engine
-
-
-# def clean_data(p):
-#     p = p[['realIP']][p['fullURL'].str.contains('\.html')].copy()
-#     return p['realIP'].value_counts()
+import numpy as np
+from Recommender import Recommender
 
 
 if __name__ == '__main__':
-    # 初始化数据库连接:
-    engine = create_engine('mysql+pymysql://root:123456@localhost:3306/test')
-    sql = pd.read_sql('all_gzdata', engine, chunksize=1024 * 5)
 
-    # 分块统计各个IP的点击次数
-    click_count = [i['realIP'].value_counts() for i in sql]
-    click_count = pd.concat(click_count).groupby(level=0).sum()
-    # 将Series转化为DataFrame
-    # click_count = pd.DataFrame(click_count)
-    # click_count[1] = 1
-    # click_group_count = click_count.groupby(by='realIP').sum
-    # click_group_count = click_group_count.reset_index()
-    # click_group_count = pd.DataFrame(click_group_count)
+    df = pd.read_csv('./data/zero_one_1.csv')
+    # df2 = pd.read_csv('./data/zero_one_2.csv')
+    # 随机打乱数据
+    sample = np.random.permutation(len(df))
+    # 打乱数据
+    df = df.take(sample)
+    train = df.iloc[: int(len(df) * 0.9), :]
+    test = df.iloc[int(len(df) * 0.9):, :]
 
-    # print(click_count)
+    df = df.values
+    # (9481, 4333)
+    train_data = df[: int(len(df) * 0.9), :]
+    # (1054, 4333)
+    test_data = df[int(len(df) * 0.9):, :]
 
-    # 将Series转化为DataFrame
-    click_count = pd.DataFrame(click_count)
-    click_count.columns = ['times']
-    click_count['flag'] = 1
-    total_df = click_count.groupby(by=['times']).sum()
-    total_df.to_sql('click_group_count', engine, if_exists='append')
+    train_data = train_data.T
+    test_data = test_data.T
 
-    print(total_df)
+    r = Recommender()
+    print(r.hello())
+    print(dir(r))
+    # start = time.process_time()
+    # # 计算物品的相似度矩阵
+    # sim = r.fit(train_data)
+    # df_sim = pd.DataFrame(sim)
+    # end = time.process_time()
