@@ -10,6 +10,7 @@ if __name__ == '__main__':
     data.loc[2014] = None
     data.loc[2015] = None
 
+
     # 因为02中x12为0 所以删掉
     del data['x12']
     for column_name in data.columns:
