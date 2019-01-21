@@ -4,9 +4,11 @@ from sqlalchemy import create_engine
 
 # 参考网站 https://www.cnblogs.com/amoor/p/9724429.html
 def count107(j):
-    # http://www.lawtime.cn/info/jiaotong  知识首页
-    # http://www.lawtime.cn/info/jiaotong/jtlawdljtaqf/ 知识列表
-    # http://www.lawtime.cn/info/laodonghetongfa/shishitiaoli/2008101130861.html 知识内容首页
+    """
+    107类型具体分析
+    :param j:
+    :return:
+    """
     # 找出类别包含107的网址 [fullURL数组(1138 * 1)][bool值数组]
     j = j[['fullURL']][j['fullURLId'].str.contains('107')].copy()
     j['type'] = None  # 添加空列
@@ -18,6 +20,11 @@ def count107(j):
 
 
 def count101(p):
+    """
+    101类型具体分析
+    :param j:
+    :return:
+    """
     p = p[['fullURLId']][p['fullURLId'].str.startswith('101')].copy()
     p['type'] = None  # 添加空列
     p['type'][p['fullURLId'].str.endswith('001')] = '101001'
@@ -29,11 +36,21 @@ def count101(p):
 
 
 def count_ask(p):
+    """
+    网址中带有？的具体分析
+    :param j:
+    :return:
+    """
     p = p[['fullURLId']][p['fullURL'].str.contains('?', regex=False)].copy()
     return p['fullURLId'].value_counts()
 
 
 def count_199(p):
+    """
+    199类型具体分析
+    :param j:
+    :return:
+    """
     p = p[['fullURLId', 'pageTitle']][p['fullURL'].str.contains('?', regex=False)].copy()
     p = p[['pageTitle']][p['fullURLId'].str.contains('1999001')].copy()
 
@@ -44,6 +61,7 @@ def count_199(p):
     # p['type'][p['pageTitle'].str.contains('法律快搜', na=False, regex=True)] = u'法律快搜'
     # p['type'][~p['pageTitle'].str.contains('(法律快车-律师助手|免费发布法律咨询|咨询发布成功|法律快搜)', na=False, regex=True)] = u'其他类型'
 
+    # 下面这个方法比上面那个更好一点
     p['type'] = 1  # 添加空列
     p.loc[p['pageTitle'].str.contains('法律快车-律师助手', na=False, regex=True), 'type'] = u'快车-法律助手'
     p.loc[p['pageTitle'].str.contains('免费发布法律咨询', na=False, regex=True), 'type'] = u'免费发布法律咨询'
@@ -55,9 +73,13 @@ def count_199(p):
 
 
 def wandering(p):
-    # p = p[['fullURLId']][~p['fullURL'].str.contains('\.html$')].copy()
+    """
+     瞎逛用户具体分析
+     :param j:
+     :return:
+     """
+    # 取出不以.html的数据
     p = p[['fullURLId']][~p['fullURL'].str.endswith('.html')].copy()
-
     return p['fullURLId'].value_counts()
 
 
@@ -74,8 +96,9 @@ if __name__ == '__main__':
     # count_107 = count_107.reset_index()
     # count_107.columns = ['type', 'num']
     # count_107['percent'] = count_107['num'] / count_107['num'].sum() * 100
-
+    #
     # print(count_107)
+
     """
         type     num    percent
     0  知识内容页  164243  89.799344
@@ -85,7 +108,7 @@ if __name__ == '__main__':
     """
 
     # 注意:这里需要把107的数据的分类先注释掉，因为sql是一个生成器类型，所以在使用过一次以后，就不能继续使用了。必须要重新执行一次读取。
-    # 咨询类别内部统计 101开头的
+    # # 咨询类别内部统计 101开头的
     # count_101 = [count101(m) for m in sql]
     # count_101 = pd.concat(count_101).groupby(level=0).sum()
     # count_101 = count_101.reset_index()
@@ -94,6 +117,7 @@ if __name__ == '__main__':
     # count_101['percent'] = count_101['num'] / count_101['num'].sum() * 100
     #
     # print(count_101)
+
     """
          type     num    percent
     2  101003  396612  96.343386
@@ -102,6 +126,7 @@ if __name__ == '__main__':
     3      其他    1674   0.406641
 
     """
+
     # 带问号的类型统计
     # count_ask = [count_ask(m) for m in sql]
     # count_ask = pd.concat(count_ask).groupby(level=0).sum()
@@ -143,7 +168,7 @@ if __name__ == '__main__':
     # 闲逛用户统计
     count_wandering = [wandering(m) for m in sql]
     count_wandering = pd.concat(count_wandering).groupby(level=0).sum()
-    # print(count_wandering)
+    print(count_wandering)
     """
     101001       5603
     101004        125

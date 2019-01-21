@@ -19,6 +19,7 @@ if __name__ == '__main__':
         6  0.636364  0.846990  0.786184  0.929571
 
     """
+    # 零均值标准化
     mean_data = (data - data.mean()) / data.std()
     print('*********' * 5)
     print(mean_data)
@@ -33,6 +34,7 @@ if __name__ == '__main__':
         6  0.650438  0.421642  0.069308  0.595564
 
     """
+    # 小数定标标准化
     temp_data = data / 10 ** np.ceil(np.log10(data.abs().max()))
     print('*********' * 5)
     print(temp_data)

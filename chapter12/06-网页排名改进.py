@@ -35,7 +35,7 @@ if __name__ == '__main__':
     web_count = click_count['fullURL'].value_counts()
     web_count = web_count.reset_index()
     web_count.columns = ['fullURL', 'click_times', ]
-    # print(web_count)
+    print(web_count)
     """
                                                   fullURL  click_times
     0                   http://www.lawtime.cn/faguizt/23.html         6503
@@ -137,7 +137,7 @@ if __name__ == '__main__':
     type_count_result.columns = [u'网页类型', u'总点击数', u'用户数']
     type_count_result[u'平均点击率'] = type_count_result[u'总点击数'] / type_count_result[u'用户数']
     type_count_result = type_count_result.sort_values(by=[u'平均点击率'], ascending=False)
-    # print(type_count_result)
+    print(type_count_result)
     """
       网页类型    总点击数     用户数     平均点击率
         4  301   17412    3992  4.361723
